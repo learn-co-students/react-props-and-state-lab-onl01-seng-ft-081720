@@ -17,25 +17,18 @@ class App extends React.Component {
   }
 
   onChangeType = (type) => {
-    this.state.filters.type = type
+    console.log(type.value)
+    this.state.filters.type = type.value
+    console.log(this.state.filters.type)
   }
 
   onFindPetsClick = () => {
-    let thingy = this.state.filters.type.value
+    let thingy = this.state.filters.type
     if (thingy === 'cat' || thingy === 'dog' || thingy === 'micropig'){
-      fetch(`/api/pets?type=${this.state.filters.type.value}`).then(resp => resp.json()).then(petData => this.setDatState(petData))
+      fetch(`/api/pets?type=${this.state.filters.type}`).then(resp => resp.json()).then(petData => this.setDatState(petData))
     } else {
       fetch("/api/pets").then(resp => resp.json()).then(petData => this.setDatState(petData))
     }
-    // if (this.state.filters.type.value === 'cat') {
-    //   fetch("/api/pets?type=cat").then(resp => resp.json()).then(petData => this.setDatState(petData))
-    // } else if (this.state.filters.type.value === 'dog') {
-    //   fetch("/api/pets?type=dog").then(resp => resp.json()).then(petData => this.setDatState(petData))
-    // } else if (this.state.filters.type.value === 'micropig') {
-    //   fetch("/api/pets?type=micropig").then(resp => resp.json()).then(petData => this.setDatState(petData))
-    // } else {
-    //   fetch("/api/pets").then(resp => resp.json()).then(petData => this.setDatState(petData))
-    // }
   }
 
   setDatState = (data) => {
@@ -48,6 +41,7 @@ class App extends React.Component {
 
   onAdoptPet = (id) => {
     this.state.pets.find(pet => pet.id === id).isAdopted = true
+    console.log(this.state.pets.find(pet => pet.id === id))
   }
 
   render() {
