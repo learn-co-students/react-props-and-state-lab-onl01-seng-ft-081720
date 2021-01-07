@@ -15,6 +15,78 @@ class App extends React.Component {
     }
   }
 
+  updateFilterType = (event) => {
+    // console.log(event)
+    this.setState({
+      filters: {
+        type: event.currentTarget.value
+      }
+    })
+  }
+
+
+  fetchPets = () => {
+
+
+    if (this.state.filters.type !== "all") {
+      fetch(`/api/pets?type=${this.state.filters.type}`)
+      .then(resp => resp.json())
+      .then(json => {
+        this.setState({
+          pets: json
+
+        })
+      })
+    } else {
+
+      fetch('/api/pets')
+      .then(resp => resp.json())
+      .then(json => {
+        this.setState({
+          pets: json
+          
+        })
+      })
+    }
+
+  }
+
+  onAdoption = (petId) => {
+    debugger
+    const pets = this.state.pets.map(pet => {
+      if (pet.id === petId) {
+        return {...pet, isAdopted: true}
+      } else {
+        return pet
+      }
+
+      
+    })
+    this.setState({pets: pets})
+    // let adoptedPet = this.state.pets.find(pet => pet.id === petId)
+    // debugger
+    // console.log(this.state.pets)
+    // console.log(this.state.pets.splice(0, 1))
+    // console.log(this.state.pets)
+
+
+
+    // this.setState({
+    //   pets: [[...this.state.pets], adoptedPet]
+    // })
+    // // this.setState({
+    // //   pets: [...this.state.pets, adoptedPet]
+
+    // // })
+    // console.log(adoptedPet)
+    // // debugger
+
+    
+
+
+
+  }
+
   render() {
     return (
       <div className="ui container">
@@ -24,10 +96,10 @@ class App extends React.Component {
         <div className="ui container">
           <div className="ui grid">
             <div className="four wide column">
-              <Filters />
+              < Filters onChangeType={event => this.updateFilterType(event)} onFindPetsClick={this.fetchPets} />
             </div>
             <div className="twelve wide column">
-              <PetBrowser />
+              <PetBrowser pets={this.state.pets} onAdoptPet={this.onAdoption} />
             </div>
           </div>
         </div>
@@ -37,3 +109,5 @@ class App extends React.Component {
 }
 
 export default App
+
+
